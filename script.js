@@ -6,21 +6,36 @@ const board = () => {
         },
         addEdge(move1, move2) {
             this.moves.get(move1).push(move2);
-            // this.moves.get(move2).push(move1);  //Undirected
+            this.moves.get(move2).push(move1);  //Undirected
         },
         showMoves() {
-            console.log(this.moves);
             const vertexKeys = this.moves.keys();     //Get vertices
+
             for (let vKey of vertexKeys) {     // Iterate vertices
                 const adjMoves = this.moves.get(vKey);
+                console.log(adjMoves);
                 for (let adjMove of adjMoves) {
                     // console.log(adjMove);
                 }
             }
         },
-        findShortestPath(startingPos, destination) {
-
-
+        getMove(xPos, yPos) {
+            let vertexKeys = this.moves.keys();
+            for (let move of vertexKeys) {
+                if (move[0] === xPos && move[1] === yPos) {
+                    // console.log('MOVE', move);
+                    return move;
+                }
+            }
+        },
+        findShortestPath(startingPos, destination, movesAr = []) {
+            movesAr.push(startingPos);
+            if (startingPos === destination) {
+                return movesAr;
+            }
+            for (let adjPos of startingPos) {
+                this.findShortestPath(adjPos, destination, movesAr);
+            }
         }
     };
 };
@@ -45,11 +60,11 @@ const connectMoves = (chessBoard, moveAr) => {
             let xPos = move[0] + moveX[i];
             let yPos = move[1] + moveY[i];
             if (xPos >= 1 && yPos >= 1 && xPos <= 8 && yPos <= 8) {
-                chessBoard.addEdge(move, [xPos, yPos]);
+                let adjMove = chessBoard.getMove(xPos, yPos);
+                chessBoard.addEdge(move, adjMove);
             }
         }
     }
-    chessBoard.showMoves();
 };
 
 const driver = () => {
@@ -62,7 +77,7 @@ const driver = () => {
     }
 
     connectMoves(chessBoard, moveAr);
-    // chessBoard.showMoves();
+    chessBoard.showMoves();
 };
 
 driver();
