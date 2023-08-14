@@ -1,3 +1,7 @@
+
+//Problem. Having array values as keys doesn't work when using .get()
+//Some issue with how arrays don't match
+
 const board = () => {
     return {
         moves: new Map(),
@@ -9,51 +13,82 @@ const board = () => {
             // this.moves.get(move2).push(move1);  //Undirected
         },
         showMoves() {
-            console.log(this.moves);
-            const vertexKey = this.moves.keys();
-            for (let move of vertexKey) {
-                const adjMoves = this.moves.get(move);
+            const posKeys = this.moves.keys();
+            console.log('key:', posKeys);
+            // let newPos = this.moves.get();
+            for (let pos of posKeys) {
+                const adjMoves = this.moves.get(pos);
+                // const adjMoves = this.moves.get([1, 1]);
+                console.log('Test: ', this.moves.get([3, 1])); //Undefined
+                // console.log(adjMoves);
                 for (let adjMove of adjMoves) {
-                    // console.log(move, '=>', adjMove);
+                    // console.log(pos, '=>', adjMove);
                     // console.log(adjMove);
                 }
             }
         },
+        getMove(pos) {
+            const posKeys = this.moves.keys();
+            for (let posKey of posKeys) {
+                if (posKey[0] === pos[0] &&
+                    posKey[1] === pos[1]) {
+                    return posKey;
+                }
+            }
+        },
         findShortestPath(startingPos, destination) {
-            //if visited == false{}
             let queue = [];
-            let visited = {};
             let pathAr = [];
+            let visited = {};
+            let match = false;
 
-            let readQueue = (pos) => {
-                queue.push(pos);
-                while (queue.length > 0) {
-                    let currentNode = queue.shift();
-                    if (!currentNode.visited) {
-                        visited[currentNode] = true;
-                        pathAr.push(currentNode);
-                        if (currentNode[0] === destination[0] &&
-                            currentNode[1] === destination[1]) {
-                            return pathAr;
-                        }
-                        // readQueue(currentNode);
-                    }
-
+            let checkMatch = (currentPos) => {
+                if (currentPos[0] === destination[0] &&
+                    currentPos[1] === destination[1]) {
+                    match = true;
                 }
             };
+            //Compare pos to dest
+            //If not match, add edges to queue
 
-            readQueue(move);
-            //Need to stop visiting the same adjList
-            // let move = this.getMove(startingPos[0], startingPos[1]);
+            //Might have to check if currentPos is farther away than pos
+            let readQueue = (pos) => {
+                if (pos.visited) {
+                    return pathAr;
+                }
+                pathAr.push(pos);//
+                if (checkMatch(pos)) {
+                    return pathAr;//
+                }
+                // If pos isn't visited AND doesn't match
 
-            let adjMoves = this.moves.get(move);
-            for (let adjMove of adjMoves) {
-                readQueue(adjMove);
-            }   //Check if readQueue needs recursion even though this loop itterates
-            return pathAr;//
+                //Need to add pos adjacent moves to queue
+
+                visited[pos] = true;
+                let adjMoves = this.moves.get(pos);
+                // console.log(this.moves);
+                console.log();
+                console.log('pos: ', pos);
+                console.log('adjMoves list: ', adjMoves);      //Undefined
+                for (let adjMove of adjMoves) {
+                    queue.push(adjMove);
+                }
+
+                let currentPos = queue.shift();
+                console.log(currentPos);
+                readQueue(currentPos);
+
+
+            };
+            readQueue(startingPos);
+
+            return pathAr;
         },
     };
 };
+
+
+
 
 const getPositionAr = () => {
     let positionAr = [];
@@ -77,7 +112,6 @@ const connectMoves = (chessBoard, positionAr) => {
             if (xPos >= 1 && yPos >= 1 && xPos <= 8 && yPos <= 8) {
                 let adjMove = [xPos, yPos];
                 chessBoard.addMove(pos, adjMove);
-                // console.log(xPos, yPos);
             }
         }
     }
@@ -92,13 +126,14 @@ const driver = () => {
         chessBoard.addPos(move);
     }
     connectMoves(chessBoard, positionAr);
-    chessBoard.showMoves();
+    // chessBoard.showMoves();
 
     console.log();
     const start = [1, 1];
-    const dest = [5, 5];
-    // chessBoard.showMoves();
-    // console.log('Path: ', chessBoard.findShortestPath(start, dest));
+    const dest = [3, 3];
+    chessBoard.showMoves();
+    console.log('Path: ');
+    // console.log(chessBoard.findShortestPath(start, dest));
 };
 
 driver();
