@@ -1,8 +1,8 @@
 const board = () => {
     return {
         moves: new Map(),
-        addPos(move) {
-            this.moves.set(move, []);
+        addPos(pos) {
+            this.moves.set(pos, []);
         },
         addMove(move1, move2) {
             this.moves.get(move1).push(move2);
@@ -59,8 +59,8 @@ const getPositionAr = () => {
     let positionAr = [];
     for (let i = 1; i <= 8; i++) {
         for (let j = 1; j <= 8; j++) {
-            let move = [j, i];
-            positionAr.push(move);
+            let pos = [j, i];
+            positionAr.push(pos);
         }
     }
     return positionAr;
@@ -70,13 +70,13 @@ const connectMoves = (chessBoard, positionAr) => {
     let moveX = [2, 1, -1, -2, -2, -1, 1, 2];
     let moveY = [1, 2, 2, 1, -1, -2, -2, -1];
     // let visited = {};
-    for (let move of positionAr) {
+    for (let pos of positionAr) {
         for (let i = 0; i < moveX.length; i++) {
-            let xPos = move[0] + moveX[i];
-            let yPos = move[1] + moveY[i];
+            let xPos = pos[0] + moveX[i];
+            let yPos = pos[1] + moveY[i];
             if (xPos >= 1 && yPos >= 1 && xPos <= 8 && yPos <= 8) {
                 let adjMove = [xPos, yPos];
-                chessBoard.addMove(move, adjMove);
+                chessBoard.addMove(pos, adjMove);
                 // console.log(xPos, yPos);
             }
         }
