@@ -5,10 +5,6 @@ const board = () => {
             this.moves.set(move, []);
         },
         addMove(move1, move2) {
-            console.log('Move1 Move2: ', move1, move2);
-            console.log(this.moves.get(move1));
-            console.log(this.moves.get(move2));
-
             this.moves.get(move1).push(move2);
             // this.moves.get(move2).push(move1);  //Undirected
         },
@@ -74,7 +70,7 @@ const connectMoves = (chessBoard, moveAr) => {
     let moveX = [2, 1, -1, -2, -2, -1, 1, 2];
     let moveY = [1, 2, 2, 1, -1, -2, -2, -1];
     // let visited = {};
-    for (let move in moveAr) {
+    for (let move of moveAr) {
         for (let i = 0; i < moveX.length; i++) {
             let xPos = move[0] + moveX[i];
             let yPos = move[1] + moveY[i];
@@ -95,7 +91,7 @@ const driver = () => {
         let move = moveAr[i];
         chessBoard.addPos(move);
     }
-    // connectMoves(chessBoard, moveAr);
+    connectMoves(chessBoard, moveAr);
     chessBoard.showMoves();
 
 
