@@ -55,22 +55,22 @@ const board = () => {
     };
 };
 
-const getMovesArray = () => {
-    let movesAr = [];
+const getPositionAr = () => {
+    let positionAr = [];
     for (let i = 1; i <= 8; i++) {
         for (let j = 1; j <= 8; j++) {
             let move = [j, i];
-            movesAr.push(move);
+            positionAr.push(move);
         }
     }
-    return movesAr;
+    return positionAr;
 };
 
-const connectMoves = (chessBoard, moveAr) => {
+const connectMoves = (chessBoard, positionAr) => {
     let moveX = [2, 1, -1, -2, -2, -1, 1, 2];
     let moveY = [1, 2, 2, 1, -1, -2, -2, -1];
     // let visited = {};
-    for (let move of moveAr) {
+    for (let move of positionAr) {
         for (let i = 0; i < moveX.length; i++) {
             let xPos = move[0] + moveX[i];
             let yPos = move[1] + moveY[i];
@@ -85,21 +85,18 @@ const connectMoves = (chessBoard, moveAr) => {
 
 const driver = () => {
     const chessBoard = board();
-    const moveAr = getMovesArray();
+    const positionAr = getPositionAr();
 
-    for (let i = 0; i < moveAr.length; i++) {
-        let move = moveAr[i];
+    for (let i = 0; i < positionAr.length; i++) {
+        let move = positionAr[i];
         chessBoard.addPos(move);
     }
-    connectMoves(chessBoard, moveAr);
+    connectMoves(chessBoard, positionAr);
     chessBoard.showMoves();
 
-
-    // connectMoves(chessBoard, moveAr);   //Stop using moveAr
     console.log();
     const start = [1, 1];
     const dest = [5, 5];
-    // console.log(start, dest);
     // chessBoard.showMoves();
     // console.log('Path: ', chessBoard.findShortestPath(start, dest));
 };
