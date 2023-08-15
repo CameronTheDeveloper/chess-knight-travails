@@ -1,7 +1,3 @@
-
-//Problem. Having array values as keys doesn't work when using .get()
-//Some issue with how arrays don't match
-
 const board = () => {
     return {
         moves: new Map(),
@@ -14,12 +10,11 @@ const board = () => {
         },
         showMoves() {
             const posKeys = this.moves.keys();
-            console.log('key:', posKeys);
+            // console.log('key:', posKeys);
             // let newPos = this.moves.get();
             for (let pos of posKeys) {
                 const adjMoves = this.moves.get(pos);
                 // const adjMoves = this.moves.get([1, 1]);
-                console.log('Test: ', this.moves.get([3, 1])); //Undefined
                 // console.log(adjMoves);
                 for (let adjMove of adjMoves) {
                     // console.log(pos, '=>', adjMove);
@@ -27,12 +22,14 @@ const board = () => {
                 }
             }
         },
-        getMove(pos) {
+        getAdjMoves(pos) {
             const posKeys = this.moves.keys();
             for (let posKey of posKeys) {
+                // console.log(posKey);
                 if (posKey[0] === pos[0] &&
                     posKey[1] === pos[1]) {
-                    return posKey;
+                    let adjMoves = this.moves.get(posKey);
+                    return adjMoves;
                 }
             }
         },
@@ -65,30 +62,30 @@ const board = () => {
                 //Need to add pos adjacent moves to queue
 
                 visited[pos] = true;
-                let adjMoves = this.moves.get(pos);
-                // console.log(this.moves);
+                // let adjMoves = this.moves.get(pos);
+                let adjMoves = this.getAdjMoves(pos);
                 console.log();
-                console.log('pos: ', pos);
-                console.log('adjMoves list: ', adjMoves);      //Undefined
                 for (let adjMove of adjMoves) {
-                    queue.push(adjMove);
+                    // console.log(adjMoves);
+                    queue.push(adjMove);    //Needs to add each adj move of pos
                 }
-
                 let currentPos = queue.shift();
-                console.log(currentPos);
+                // console.log(currentPos);
                 readQueue(currentPos);
 
 
             };
+            while (match === false) {
+                readQueue(startingPos);
+
+            }
             readQueue(startingPos);
+
 
             return pathAr;
         },
     };
 };
-
-
-
 
 const getPositionAr = () => {
     let positionAr = [];
@@ -131,9 +128,9 @@ const driver = () => {
     console.log();
     const start = [1, 1];
     const dest = [3, 3];
-    chessBoard.showMoves();
+    // chessBoard.showMoves();
     console.log('Path: ');
-    // console.log(chessBoard.findShortestPath(start, dest));
+    console.log(chessBoard.findShortestPath(start, dest));
 };
 
 driver();
