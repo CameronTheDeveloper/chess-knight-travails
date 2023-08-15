@@ -1,3 +1,23 @@
+const knight = () => {
+    return {
+        connectMoves(chessBoard, positionAr) {
+            let moveX = [2, 1, -1, -2, -2, -1, 1, 2];
+            let moveY = [1, 2, 2, 1, -1, -2, -2, -1];
+            // let visited = {};
+            for (let pos of positionAr) {
+                for (let i = 0; i < moveX.length; i++) {
+                    let xPos = pos[0] + moveX[i];
+                    let yPos = pos[1] + moveY[i];
+                    if (xPos >= 1 && yPos >= 1 && xPos <= 8 && yPos <= 8) {
+                        let adjMove = [xPos, yPos];
+                        chessBoard.addMove(pos, adjMove);
+                    }
+                }
+            }
+        },
+    };
+};
+
 const board = () => {
     return {
         moves: new Map(),
@@ -97,31 +117,18 @@ const getPositionAr = () => {
     return positionAr;
 };
 
-const connectMoves = (chessBoard, positionAr) => {
-    let moveX = [2, 1, -1, -2, -2, -1, 1, 2];
-    let moveY = [1, 2, 2, 1, -1, -2, -2, -1];
-    // let visited = {};
-    for (let pos of positionAr) {
-        for (let i = 0; i < moveX.length; i++) {
-            let xPos = pos[0] + moveX[i];
-            let yPos = pos[1] + moveY[i];
-            if (xPos >= 1 && yPos >= 1 && xPos <= 8 && yPos <= 8) {
-                let adjMove = [xPos, yPos];
-                chessBoard.addMove(pos, adjMove);
-            }
-        }
-    }
-};
+
 
 const driver = () => {
     const chessBoard = board();
+    const knight1 = knight();
     const positionAr = getPositionAr();
 
     for (let i = 0; i < positionAr.length; i++) {
         let move = positionAr[i];
         chessBoard.addPos(move);
     }
-    connectMoves(chessBoard, positionAr);
+    knight1.connectMoves(chessBoard, positionAr);
     // chessBoard.showMoves();
 
     console.log();
