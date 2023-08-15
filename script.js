@@ -52,10 +52,7 @@ const board = () => {
             //Might have to check if currentPos is farther away than pos
             let readQueue = (pos) => {
                 // console.log('visited: ', visited);
-                console.log(pos);
-                if (visited[pos]) {
-                    return pathAr;
-                }
+                console.log('Pos: ', pos);
                 pathAr.push(pos);//
                 if (checkMatch(pos)) {
                     return pathAr;//
@@ -64,25 +61,25 @@ const board = () => {
 
                 //Need to add pos adjacent moves to queue
 
-                visited[pos.toString()] = true; //Similar issue: can't check if pos is being visited
-                // let adjMoves = this.moves.get(pos);
+                visited[pos.toString()] = true;
                 let adjMoves = this.getAdjMoves(pos);
-                console.log();
+                // console.log(adjMoves);
                 for (let adjMove of adjMoves) {
                     // console.log(adjMoves);
-                    queue.push(adjMove);    //Needs to add each adj move of pos
+                    queue.push(adjMove);
                 }
+                // console.log('Queue: ', queue);
                 let currentPos = queue.shift();
+                while (visited[currentPos]) {
+                    currentPos = queue.shift();
+                }
                 // console.log(currentPos);
                 readQueue(currentPos);
-
-
             };
             // while (match === false) {
             //     readQueue(startingPos);
             // }
             readQueue(startingPos);
-
 
             return pathAr;
         },
