@@ -38,6 +38,7 @@ const board = () => {
             // this.moves.get(move2).push(move1);  //Undirected
         },
         showMoves() {
+            // console.log(this.moves);
             const posKeys = this.moves.keys();
             // console.log('key:', posKeys);
             // let newPos = this.moves.get();
@@ -108,10 +109,10 @@ const board = () => {
 
 const getPositionAr = () => {
     let positionAr = [];
-    for (let i = 1; i <= 8; i++) {
-        for (let j = 1; j <= 8; j++) {
-            let pos = [j, i];
-            positionAr.push(pos);
+    for (let x = 1; x <= 8; x++) {
+        for (let y = 1; y <= 8; y++) {
+            let newPos = position(x, y);
+            positionAr.push(newPos);
         }
     }
     return positionAr;
@@ -128,15 +129,15 @@ const driver = () => {
         let move = positionAr[i];
         chessBoard.addPos(move);
     }
-    knight1.connectMoves(chessBoard, positionAr);
-    // chessBoard.showMoves();
+    // knight1.connectMoves(chessBoard, positionAr);
+    chessBoard.showMoves();
 
     console.log();
     const start = [1, 1];
     const dest = [5, 1];
     // chessBoard.showMoves();
     console.log('Path: ');
-    console.log(chessBoard.findShortestPath(start, dest));
+    // console.log(chessBoard.findShortestPath(start, dest));
 };
 
 driver();
