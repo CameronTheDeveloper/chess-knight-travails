@@ -56,9 +56,10 @@ const board = () => {
             const posKeys = this.moves.keys();
             for (let posKey of posKeys) {
                 // console.log(posKey);
-                if (posKey[0] === pos[0] &&
-                    posKey[1] === pos[1]) {
+                if (posKey.x === pos[0] &&
+                    posKey.y === pos[1]) {
                     let adjMoves = this.moves.get(posKey);
+                    console.log('adjMoves: ', adjMoves);
                     return adjMoves;
                 }
             }
@@ -80,7 +81,7 @@ const board = () => {
 
             //Might have to check if currentPos is farther away than pos
             let readQueue = (pos, pathAr = []) => {
-                let newAr = pathAr;
+                // let newAr = pathAr;
                 pathAr.push(pos);
                 if (checkMatch(pos)) {
                     return pathAr;// Return new array instead
@@ -102,7 +103,7 @@ const board = () => {
             readQueue(startingPos,);
             console.log('Count: ', count);
 
-            return pathAr;
+            // return pathAr;
         },
     };
 };
@@ -137,7 +138,7 @@ const driver = () => {
     const dest = [5, 1];
     // chessBoard.showMoves();
     console.log('Path: ');
-    // console.log(chessBoard.findShortestPath(start, dest));
+    console.log(chessBoard.findShortestPath(start, dest));
 };
 
 driver();
