@@ -18,6 +18,15 @@ const knight = () => {
     };
 };
 
+const position = (x, y) => {
+    return {
+        x: x,
+        y: y,
+        visited: false,
+        path: [],
+    };
+};
+
 const board = () => {
     return {
         moves: new Map(),
@@ -55,51 +64,42 @@ const board = () => {
         },
         findShortestPath(startingPos, destination) {
             let queue = [];
-            let pathAr = [];
+            // let pathAr = [];
             let visited = {};
-            let match = false;
+            let count = 0;
 
             let checkMatch = (currentPos) => {
                 if (currentPos[0] === destination[0] &&
                     currentPos[1] === destination[1]) {
-                    match = true;
-                    return match;
+                    return true;
                 }
             };
             //Compare pos to dest
             //If not match, add edges to queue
 
             //Might have to check if currentPos is farther away than pos
-            let readQueue = (pos) => {
-                // console.log('visited: ', visited);
-                console.log('Pos: ', pos);
-                pathAr.push(pos);//
+            let readQueue = (pos, pathAr = []) => {
+                let newAr = pathAr;
+                pathAr.push(pos);
                 if (checkMatch(pos)) {
-                    return pathAr;//
+                    return pathAr;// Return new array instead
                 }
-                // If pos isn't visited AND doesn't match
 
-                //Need to add pos adjacent moves to queue
-
-                visited[pos.toString()] = true;
+                visited[pos] = true;
                 let adjMoves = this.getAdjMoves(pos);
-                // console.log(adjMoves);
+                count++;
                 for (let adjMove of adjMoves) {
-                    // console.log(adjMoves);
                     queue.push(adjMove);
                 }
-                // console.log('Queue: ', queue);
                 let currentPos = queue.shift();
                 while (visited[currentPos]) {
                     currentPos = queue.shift();
                 }
-                // console.log(currentPos);
                 readQueue(currentPos);
             };
-            // while (match === false) {
-            //     readQueue(startingPos);
-            // }
-            readQueue(startingPos);
+
+            readQueue(startingPos,);
+            console.log('Count: ', count);
 
             return pathAr;
         },
@@ -133,7 +133,7 @@ const driver = () => {
 
     console.log();
     const start = [1, 1];
-    const dest = [3, 3];
+    const dest = [5, 1];
     // chessBoard.showMoves();
     console.log('Path: ');
     console.log(chessBoard.findShortestPath(start, dest));
