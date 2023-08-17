@@ -85,7 +85,7 @@ const board = () => {
             const addPosPath = (pos, prevPosPath = '') => {
                 let currentPos = this.getVertex(pos);
                 currentPos.path = prevPosPath;
-                currentPos.path += `[${pos.join(', ')}]`;
+                currentPos.path += ` [${pos.join(', ')}]`;
             };
 
             const readQueue = () => {
@@ -111,7 +111,6 @@ const board = () => {
             };
 
             let path = readQueue();
-            console.log('Count: ', count);
             return path;
         },
     };
@@ -140,13 +139,15 @@ const driver = () => {
     knight1.connectMoves(chessBoard, positionAr);
     // chessBoard.showMoves();
 
-    console.log();
-    const start = [2, 3];
-    const dest = [5, 4];
-    // chessBoard.showMoves();
+    const start = [1, 1];
+    const dest = [8, 8];
     let pathToDest = chessBoard.findShortestPath(start, dest);
-    // console.log(`You made it in ${pathToDest.pathLength} moves`);
-    console.log('Path: ', pathToDest);
+    let pathCount = pathToDest.split('] [');
+
+    console.log(`Quickest path from ${start} to ${dest}:`);
+    console.log();
+    console.log(`It took ${pathCount.length - 1} moves or ${pathCount.length} positions`);
+    console.log('Path:', pathToDest);
 };
 
 driver();
