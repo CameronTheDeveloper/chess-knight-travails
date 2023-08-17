@@ -83,26 +83,28 @@ const board = () => {
                     return true;
                 }
             };
-            // const readQueue2 = (prevPosPath = []) => {
-            //     let pos = queue.shift();
-            //     let currentPos = this.getVertex(pos);
-            //     let adjMoves = this.moves.get(currentPos);
-            //     currentPos.path = prevPosPath;
-            //     currentPos.path.push(pos);
-            //     visited[pos] = true;
-            //     if (checkMatch(pos)) {
-            //         return currentPos.path;
-            //     }
-            // };
+            const readQueue2 = (pos, prevPosPath = '') => {
+                // let pos = queue.shift();
+                // console.log(pos);
+                let currentPos = this.getVertex(pos);
+                // let adjMoves = this.moves.get(currentPos);
+                currentPos.path = prevPosPath;
+                // currentPos.path.push(pos);
+                currentPos.path += `[${pos.join(', ')}]`;
+                // visited[pos] = true;
+                if (checkMatch(pos)) {
+                    return currentPos.path;
+                }
+            };
 
             const readQueue = (prevPosPath = '') => {
                 let pos = queue.shift();
                 // console.log(pos);
                 let currentPos = this.getVertex(pos);
                 let adjMoves = this.moves.get(currentPos);
-                currentPos.path = prevPosPath;
+                // currentPos.path = prevPosPath;
                 // currentPos.path.push(pos);
-                currentPos.path += `[${pos.join(', ')}]`;
+                // currentPos.path += `[${pos.join(', ')}]`;
                 visited[pos] = true;
                 count++;
                 if (checkMatch(pos)) {
@@ -111,22 +113,26 @@ const board = () => {
                     for (let adjMove of adjMoves) {
                         if (!visited[adjMove]) {
                             queue.push(adjMove);
+                            readQueue2(adjMove, currentPos.path);
                             // console.log('queue: ', queue);
-                            // return readQueue(currentPos.path);
                         }
                     }
+                    return readQueue(currentPos.path);
+
                     // for (let i = 0; i < adjMoves.length; i++) {
                     //     console.log(adjMoves.length);
                     //     return readQueue(currentPos.path);
                     // }
                     // console.log('Queue: ', queue);
-                    while (queue.length > 0) {
-                        // currentPos.path needs to stay the same until all adj moves are done
-                        // console.log('queue: ', queue);
-                        console.log('Current path: ', currentPos.path);
-                        console.log('Current Pos: ', currentPos);
-                        return readQueue(currentPos.path);
-                    }
+                    // while (queue.length > 0) {
+                    //     // currentPos.path needs to stay the same until all adj moves are done
+                    //     // console.log('queue: ', queue);
+                    //     console.log('Current path: ', currentPos.path);
+                    //     console.log('Current Pos: ', currentPos);
+                    //     return readQueue(currentPos.path);
+                    //     //This uses the same path value for each node
+
+                    // }
                 }
             };
 
@@ -163,7 +169,7 @@ const driver = () => {
 
     console.log();
     const start = [1, 1];
-    const dest = [4, 4];
+    const dest = [5, 2];
     // chessBoard.showMoves();
     // console.log('Path: ');
     let path = chessBoard.findShortestPath(start, dest);
