@@ -101,7 +101,7 @@ const board = () => {
                 if (match) {
                     currentPos.path.push(pos);
                     console.log('Match', currentPos);
-                    return currentPos;
+                    return currentPos.path;
                 } else {
                     // console.log('Unmatch');
                     for (let adjMove of adjMoves) {
@@ -117,14 +117,13 @@ const board = () => {
                     currentPos.path.push(prevPos);
                     console.log('Prev: ', prevPos);
                     while (queue.length > 0 && !match) {
-                        readQueue(pos);
+                        return readQueue(pos);
                     }
                 }
             };
 
             let path = readQueue();
             console.log('Count: ', count);
-            console.log(path);
             // this.showMoves();
             return path;
         },
@@ -158,11 +157,11 @@ const driver = () => {
 
     console.log();
     const start = [1, 1];
-    const dest = [3, 2];
+    const dest = [4, 4];
     // chessBoard.showMoves();
-    console.log('Path: ');
+    // console.log('Path: ');
     let path = chessBoard.findShortestPath(start, dest);
-    console.log(path);
+    console.log('Path: ', path);
     // console.log('# of moves: ', path.path.length - 1);
 };
 
