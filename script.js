@@ -82,7 +82,7 @@ const board = () => {
             let checkMatch = (currentPos) => {
                 if (currentPos[0] === destination[0] &&
                     currentPos[1] === destination[1]) {
-                    match = false;
+                    match = true;
                     // return true;
                 }
             };
@@ -96,32 +96,27 @@ const board = () => {
                 console.log(currentPos);
                 visited[pos] = true;
                 // For each adjMove(not visited), readQueue(pos);
-                // if (checkMatch(pos)) {
-                //     currentPos.path.push(pos);
-                //     return currentPos.path;
-                // }
                 count++;
                 checkMatch(pos);
                 if (match) {
-                    // console.log('Match', currentPos);
                     currentPos.path.push(pos);
+                    console.log('Match', currentPos);
                     return currentPos;
                 } else {
                     // console.log('Unmatch');
                     for (let adjMove of adjMoves) {
                         // console.log(adjMove);
                         if (!visited[adjMove]) {
-                            console.log(adjMove);
-
-                            // queue.push(adjMove);
+                            queue.push(adjMove);
                         }
                     }
+                    // console.log('Queue: ', queue);
                     // while (visited[pos]) {
                     //     pos = queue.shift();
                     // }
                     currentPos.path.push(prevPos);
-                    console.log(prevPos);
-                    while (queue.length > 0) {
+                    console.log('Prev: ', prevPos);
+                    while (queue.length > 0 && !match) {
                         readQueue(pos);
                     }
                 }
