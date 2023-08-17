@@ -21,8 +21,7 @@ const position = (x, y) => {
     return {
         x: x,
         y: y,
-        path: null,
-        pathLength: 0,
+        path: `[${x}, ${y}]`,
     };
 };
 
@@ -87,17 +86,12 @@ const board = () => {
                 let currentPos = this.getVertex(pos);
                 currentPos.path = prevPosPath;
                 currentPos.path += `[${pos.join(', ')}]`;
-                if (checkMatch(pos)) {
-                    return currentPos.path;
-                }
             };
 
             const readQueue = () => {
                 let pos = queue.shift();
                 let currentPos = this.getVertex(pos);
                 let adjMoves = this.moves.get(currentPos);
-                visited[pos] = true;
-                count++;
                 if (checkMatch(pos)) {
                     return currentPos.path;
                 } else {
@@ -105,9 +99,11 @@ const board = () => {
                         if (!visited[adjMove]) {
                             queue.push(adjMove);
                             addPosPath(adjMove, currentPos.path);
+                            visited[adjMove] = true;
                             // console.log('queue: ', queue);
                         }
                     }
+
                     return readQueue();
 
 
@@ -115,8 +111,7 @@ const board = () => {
             };
 
             let path = readQueue();
-            // console.log('Count: ', count);
-            // this.showMoves();
+            console.log('Count: ', count);
             return path;
         },
     };
@@ -146,14 +141,12 @@ const driver = () => {
     // chessBoard.showMoves();
 
     console.log();
-    const start = [1, 1];
-    const dest = [7, 5];
+    const start = [2, 3];
+    const dest = [5, 4];
     // chessBoard.showMoves();
-    // console.log('Path: ');
     let pathToDest = chessBoard.findShortestPath(start, dest);
-    console.log(`You made it in ${pathToDest.length - 1} moves`);
+    // console.log(`You made it in ${pathToDest.pathLength} moves`);
     console.log('Path: ', pathToDest);
-    // console.log('# of moves: ', path.path.length - 1);
 };
 
 driver();
