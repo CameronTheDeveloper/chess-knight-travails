@@ -3,7 +3,6 @@ const knight = () => {
         connectMoves(chessBoard, positionAr) {
             let moveX = [2, 1, -1, -2, -2, -1, 1, 2];
             let moveY = [1, 2, 2, 1, -1, -2, -2, -1];
-            // let visited = {};
             for (let pos of positionAr) {
                 for (let i = 0; i < moveX.length; i++) {
                     let xPos = pos.x + moveX[i];
@@ -77,47 +76,50 @@ const board = () => {
             // let pathAr = [];
             let visited = {};
             let count = 0;
-            let match = false;
 
             let checkMatch = (currentPos) => {
                 if (currentPos[0] === destination[0] &&
                     currentPos[1] === destination[1]) {
-                    match = true;
-                    // return true;
+                    return true;
+                }
+            };
+            let readQueue2 = (prevPosPath = []) => {
+                let pos = queue.shift();
+                let currentPos = this.getVertex(pos);
+                let adjMoves = this.moves.get(currentPos);
+                currentPos.path = prevPosPath;
+                currentPos.path.push(pos);
+                visited[pos] = true;
+                if (checkMatch(pos)) {
+                    return currentPos.path;
                 }
             };
 
-            let readQueue = (prevPos = null) => {
-                let pos = queue.shift();
-                // console.log(pos);
-                let currentPos = this.getVertex(pos);
-                let adjMoves = this.moves.get(currentPos);
-                // currentPos.path.push(prevPos);
-                console.log(currentPos);
-                visited[pos] = true;
-                // For each adjMove(not visited), readQueue(pos);
+            let readQueue = (prevPosPath = []) => {
+                // let pos = queue.shift();
+                // // console.log(pos);
+                // let currentPos = this.getVertex(pos);
+                // let adjMoves = this.moves.get(currentPos);
+                // currentPos.path = prevPosPath;
+                // currentPos.path.push(pos);
+                // visited[pos] = true;
                 count++;
-                checkMatch(pos);
-                if (match) {
-                    currentPos.path.push(pos);
-                    console.log('Match', currentPos);
+                if (checkMatch(pos)) {
                     return currentPos.path;
                 } else {
-                    // console.log('Unmatch');
                     for (let adjMove of adjMoves) {
-                        // console.log(adjMove);
                         if (!visited[adjMove]) {
                             queue.push(adjMove);
+                            // console.log('queue: ', queue);
+                            // return readQueue(currentPos.path);
                         }
                     }
-                    // console.log('Queue: ', queue);
-                    // while (visited[pos]) {
-                    //     pos = queue.shift();
-                    // }
-                    currentPos.path.push(prevPos);
-                    console.log('Prev: ', prevPos);
-                    while (queue.length > 0 && !match) {
-                        return readQueue(pos);
+                    console.log('Queue: ', queue);
+                    while (queue.length > 0) {
+                        // currentPos.path needs to stay the same until all adj moves are done
+                        // console.log('queue: ', queue);
+                        console.log('Current path: ', currentPos.path);
+                        return readQueue(currentPos.path);
                     }
                 }
             };
@@ -140,8 +142,6 @@ const getPositionAr = () => {
     }
     return positionAr;
 };
-
-
 
 const driver = () => {
     const chessBoard = board();
