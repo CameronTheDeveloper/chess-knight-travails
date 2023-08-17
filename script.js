@@ -21,7 +21,7 @@ const position = (x, y) => {
     return {
         x: x,
         y: y,
-        path: [],
+        path: null,
     };
 };
 
@@ -77,32 +77,33 @@ const board = () => {
             let visited = {};
             let count = 0;
 
-            let checkMatch = (currentPos) => {
+            const checkMatch = (currentPos) => {
                 if (currentPos[0] === destination[0] &&
                     currentPos[1] === destination[1]) {
                     return true;
                 }
             };
-            let readQueue2 = (prevPosPath = []) => {
+            // const readQueue2 = (prevPosPath = []) => {
+            //     let pos = queue.shift();
+            //     let currentPos = this.getVertex(pos);
+            //     let adjMoves = this.moves.get(currentPos);
+            //     currentPos.path = prevPosPath;
+            //     currentPos.path.push(pos);
+            //     visited[pos] = true;
+            //     if (checkMatch(pos)) {
+            //         return currentPos.path;
+            //     }
+            // };
+
+            const readQueue = (prevPosPath = '') => {
                 let pos = queue.shift();
+                // console.log(pos);
                 let currentPos = this.getVertex(pos);
                 let adjMoves = this.moves.get(currentPos);
                 currentPos.path = prevPosPath;
-                currentPos.path.push(pos);
-                visited[pos] = true;
-                if (checkMatch(pos)) {
-                    return currentPos.path;
-                }
-            };
-
-            let readQueue = (prevPosPath = []) => {
-                // let pos = queue.shift();
-                // // console.log(pos);
-                // let currentPos = this.getVertex(pos);
-                // let adjMoves = this.moves.get(currentPos);
-                // currentPos.path = prevPosPath;
                 // currentPos.path.push(pos);
-                // visited[pos] = true;
+                currentPos.path += `[${pos.join(', ')}]`;
+                visited[pos] = true;
                 count++;
                 if (checkMatch(pos)) {
                     return currentPos.path;
@@ -114,11 +115,16 @@ const board = () => {
                             // return readQueue(currentPos.path);
                         }
                     }
-                    console.log('Queue: ', queue);
+                    // for (let i = 0; i < adjMoves.length; i++) {
+                    //     console.log(adjMoves.length);
+                    //     return readQueue(currentPos.path);
+                    // }
+                    // console.log('Queue: ', queue);
                     while (queue.length > 0) {
                         // currentPos.path needs to stay the same until all adj moves are done
                         // console.log('queue: ', queue);
                         console.log('Current path: ', currentPos.path);
+                        console.log('Current Pos: ', currentPos);
                         return readQueue(currentPos.path);
                     }
                 }
