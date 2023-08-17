@@ -22,7 +22,6 @@ const position = (x, y) => {
     return {
         x: x,
         y: y,
-        visited: false,
         path: [],
     };
 };
@@ -59,51 +58,80 @@ const board = () => {
                 if (posKey.x === pos[0] &&
                     posKey.y === pos[1]) {
                     let adjMoves = this.moves.get(posKey);
-                    console.log('adjMoves: ', adjMoves);
+                    // console.log('adjMoves: ', adjMoves);
                     return adjMoves;
                 }
             }
         },
+        getVertex(pos) {
+            const posKeys = this.moves.keys();
+            for (let posKey of posKeys) {
+                if (posKey.x === pos[0] &&
+                    posKey.y === pos[1]) {
+                    return posKey;
+                }
+            }
+        },
         findShortestPath(startingPos, destination) {
-            let queue = [];
+            let queue = [startingPos];
             // let pathAr = [];
             let visited = {};
             let count = 0;
+            let match = false;
 
             let checkMatch = (currentPos) => {
                 if (currentPos[0] === destination[0] &&
                     currentPos[1] === destination[1]) {
-                    return true;
+                    match = false;
+                    // return true;
                 }
             };
-            //Compare pos to dest
-            //If not match, add edges to queue
 
-            //Might have to check if currentPos is farther away than pos
-            let readQueue = (pos, pathAr = []) => {
-                // let newAr = pathAr;
-                pathAr.push(pos);
-                if (checkMatch(pos)) {
-                    return pathAr;// Return new array instead
-                }
-
+            let readQueue = (prevPos = null) => {
+                let pos = queue.shift();
+                // console.log(pos);
+                let currentPos = this.getVertex(pos);
+                let adjMoves = this.moves.get(currentPos);
+                // currentPos.path.push(prevPos);
+                console.log(currentPos);
                 visited[pos] = true;
-                let adjMoves = this.getAdjMoves(pos);
+                // For each adjMove(not visited), readQueue(pos);
+                // if (checkMatch(pos)) {
+                //     currentPos.path.push(pos);
+                //     return currentPos.path;
+                // }
                 count++;
-                for (let adjMove of adjMoves) {
-                    queue.push(adjMove);
+                checkMatch(pos);
+                if (match) {
+                    // console.log('Match', currentPos);
+                    currentPos.path.push(pos);
+                    return currentPos;
+                } else {
+                    // console.log('Unmatch');
+                    for (let adjMove of adjMoves) {
+                        // console.log(adjMove);
+                        if (!visited[adjMove]) {
+                            console.log(adjMove);
+
+                            // queue.push(adjMove);
+                        }
+                    }
+                    // while (visited[pos]) {
+                    //     pos = queue.shift();
+                    // }
+                    currentPos.path.push(prevPos);
+                    console.log(prevPos);
+                    while (queue.length > 0) {
+                        readQueue(pos);
+                    }
                 }
-                let currentPos = queue.shift();
-                while (visited[currentPos]) {
-                    currentPos = queue.shift();
-                }
-                readQueue(currentPos);
             };
 
-            readQueue(startingPos,);
+            let path = readQueue();
             console.log('Count: ', count);
-
-            // return pathAr;
+            console.log(path);
+            // this.showMoves();
+            return path;
         },
     };
 };
@@ -135,10 +163,12 @@ const driver = () => {
 
     console.log();
     const start = [1, 1];
-    const dest = [5, 1];
+    const dest = [3, 2];
     // chessBoard.showMoves();
     console.log('Path: ');
-    console.log(chessBoard.findShortestPath(start, dest));
+    let path = chessBoard.findShortestPath(start, dest);
+    console.log(path);
+    // console.log('# of moves: ', path.path.length - 1);
 };
 
 driver();
